@@ -1,0 +1,46 @@
+version: '3.6'
+services:
+  consul:
+    image: consul:${CONSUL_VERSION}
+    container_name: consul
+    command: >-
+      agent
+      -bind=0.0.0.0
+      -config-file=/config.json
+    volumes:
+      - ./config/consul.json:/config.json
+    networks:
+      - vault
+    ports:
+      - "9300:9300"
+      - "9500:9500"
+      - "9600:9600/udp"
+
+  vault:
+    image: vault:${VAULT_VERSION}
+    container_name: vault
+    ports:
+      - "9200:8200"
+    volumes:
+      - ./config/vault.json:/config.json
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - vault
+    command: >-
+      server
+      -config=/config.json
+  client:
+    container_name: client
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - CONSUL_HTTP_ADDR=host.docker.internal:9500
+      - VAULT_ADDR=http://host.docker.internal:9200
+    volumes:
+      - ./client-scripts:/mnt/data
+    command: tail -f /dev/null
+
+networks:
+  vault:
