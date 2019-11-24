@@ -6,3 +6,4 @@
 - using JFrog Artifactory for storing containers without JFrog Xray but rather have TwistLock implemented
 - implement Traeffik Load Balancer on top for auto-scalling purposes
 - Set up Monitoring for Vault using Telegraf, InfluxDB and/or Grafana
+- Keep Vault-Operations Katacoda scenario up-to-date
