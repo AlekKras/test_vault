@@ -19,3 +19,10 @@
     - 'service/main.yml'
   loop_control:
     loop_var: srvdist
+    
+- name: Handle TLS
+  include_tasks: '{{ tlsdist }}'
+  with_first_found:
+    - 'tls/main.yml'
+  loop_control:
+    loop_var: tlsdist

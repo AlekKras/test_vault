@@ -1,0 +1,5 @@
+#!/bin/sh
+VAULT_ADDR=https://{{ vault_redirect_addr }}:{{vault_config_listener_port}}
+export VAULT_ADDR
+VAULT_CACERT={{vault_tls_dest_dir}}/{{ vault_tls_ca_crt }}
+export VAULT_CACERT
