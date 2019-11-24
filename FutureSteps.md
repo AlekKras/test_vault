@@ -8,3 +8,4 @@
 - Set up Monitoring for Vault using Telegraf, InfluxDB and/or Grafana
 - Keep Vault-Operations Katacoda scenario up-to-date
 - Enable pre-commit hooks in a more variety
+- Potentially look at Raspberry Pi way of running Hashicorp Vault (?)
