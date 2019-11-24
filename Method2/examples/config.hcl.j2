@@ -1,0 +1,18 @@
+backend "file" {
+  path = "{{ vault_root }}/secrets"
+}
+# You can also do the following if you so choose to:
+#storage "s3" {
+#  access_key = "ACCESS_KEY_HERE"
+#  secret_key = "SECRET_KEY_HERE"
+#  bucket     = "vault-secret"
+#  region	 = "us-east-2"
+#}
+#
+
+listener "tcp" {
+  address = "{{ vault_ip }}:{{ vault_port }}"
+  tls_disable = 1
+}
+
+pid_file = "/var/run/vault.pid"

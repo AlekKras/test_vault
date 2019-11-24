@@ -28,3 +28,8 @@ vagrant up
 There are many ways how to provision and configure an easily accessible developement Vault cluster.
 This option is great to do in `dev` mode. This single node is provisioned into a local VM. Since it's 
 running in `dev` mode, all data is in-memory and not persisted to disk. If any agent fails or the node restarts, all data will be lost. This is only mean for local use.
+
+## Method 2: Ansible [Mediocre]
+
+This method is *Unix focused. It will not work for Windows environments. Assuming that you care about your data integrity, you 
+would not want to use Windows anyways, so this method is more beneficial for you.

@@ -1,0 +1,21 @@
+---
+- name: Install vault
+  include_tasks: '{{ pkgdist }}'
+  with_first_found:
+    - 'pkg/main.yml'
+  loop_control:
+    loop_var: pkgdist
+
+- name: Configure vault
+  include_tasks: '{{ cfgdist }}'
+  with_first_found:
+    - 'cfg/main.yml'
+  loop_control:
+    loop_var: cfgdist
+
+- name: Configure service
+  include_tasks: '{{ srvdist }}'
+  with_first_found:
+    - 'service/main.yml'
+  loop_control:
+    loop_var: srvdist

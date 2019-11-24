@@ -1,0 +1,27 @@
+---
+- name: Add vault to path
+  template:
+    src: vault.sh.j2
+    dest: '/etc/profile.d/vault.sh'
+    owner: root
+    group: root
+    mode: 0644
+  notify: systemd_reload
+
+- name: Create Vault config directory
+  file:
+    dest: '{{ vault_config }}'
+    owner: "{{ vault_user }}"
+    group: "{{ vault_group }}"
+    mode: 0755
+    state: directory
+
+- name: Install vault config
+  template:
+    src: config.hcl.j2
+    dest: '{{ vault_config }}/config.hcl'
+    owner: root
+    group: root
+    mode: 0644
+  when: vault_server
+  notify: vault

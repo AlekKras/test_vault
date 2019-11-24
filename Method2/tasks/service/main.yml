@@ -1,0 +1,15 @@
+---
+- name: Install vault service file
+  template:
+    src: vault.service.j2
+    dest: '/etc/systemd/system/vault.service'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable vault
+  service:
+    name: vault
+    state: started
+    enabled: true
+  when: vault_server

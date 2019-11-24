@@ -1,0 +1,5 @@
+[vaultservers]
+localhost
+
+[vaultservers:vars]
+vault_version=1.3.0

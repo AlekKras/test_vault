@@ -1,0 +1,18 @@
+[Unit]
+Description=HashiCorp's Vault Secrets Store
+After=network.target
+
+[Service]
+User=vault
+Group=vault
+ExecStart={{ vault_root }}/bin/vault server -config={{ vault_config }}/config.hcl
+ExecReload=/usr/local/bin/kill --signal HUP $MAINPID
+CapabilityBoundingSet=CAP_SYSLOG CAP_IPC_LOCK
+Capabilities=CAP_IPC_LOCK+ep
+SecureBits=keep-caps
+NoNewPrivileges=yes
+KillSignal=SIGINT
+PIDFile=/var/run/vault.pid
+
+[Install]
+WantedBy=multi-user.target
