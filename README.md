@@ -137,93 +137,15 @@ You can also curl it like this:
 curl -k -H "x-vault-token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/kv/myapp/config"
 ```
 
-### Method 4: Docker [Alright]
+### Method 4: Docker+Jenkins [Alright]
 
-The config files for consul and vault are in `config/` folder. 
+We use docker-compose to orchestrate 3 containers:
+- Consul
+- Vault
+- Jenkins
 
-Get a consul master token:
-```
-$ uuidgen
->>> SECRET_MASTER_TOKEN
-```
-Replace the master token in `config/consul.json` file.
-
-Then start Consul:
-```
-docker-compose up -d consul
-```
-
-Navigate to `localhost:9500` and ensure ConsulUI is running.
-
-Navigate to `ACL` and output your `SECRET_MASTER_TOKEN`.
-
-Go to New Policy and put name as `vault_agent` and put the rules:
-```
-{
-  "key_prefix": {
-    "vault/": {
-      "policy": "write"
-    }
-  },
-  "node_prefix": {
-    "": {
-      "policy": "write"
-    }
-  },
-  "service": {
-    "vault": {
-      "policy": "write"
-    }
-  },
-  "agent_prefix": {
-    "": {
-      "policy": "write"
-    }
-    
-  },
-  "session_prefix": {
-    "": {
-      "policy": "write"
-    }
-  }
-}
-```
-
-Then generate token for Vault: `ACL` -> `New Token` -> `vault_agent` policy applied
-
-Get that token and replace `config/vault.json` as `VAULT_AGNET_TOKEN` variable.
-
-Start Vault by `docker-compose up -d vault`. Navigate to `localhost:9500`.
-
-Vault has started but not yet initialized.
-
-Let's build vault client:
+Create volume called `jenkins-data` and bind local directory config to the consul container.
 
 ```
-docker-compose build
-docker-compose up -d client
+docker-compose up -d
 ```
-
-You can docker exec to the container, initialize it and unseal the vault.
-
-Get list of keys by curl:
-
-```
-export VAULT_TOKEN={TOKEN}
-export VAULT_ADDR=http://127.0.0.1:9200
-curl \
-  --header "X-Vault-Token: $VAULT_TOKEN" \
-  --request LIST \
-  "$VAULT_ADDR/v1/kv"
-```
-
-Get data from key:
-
-```
-export VAULT_TOKEN={TOKEN}
-export VAULT_ADDR=http://127.0.0.1:9200
-curl \
-  --header "X-Vault-Token: $VAULT_TOKEN" \
-  "$VAULT_ADDR/v1/kv/my-secret"
-```
-

@@ -1,46 +1,45 @@
-version: '3.6'
+version: '2'
 services:
+
   consul:
-    image: consul:${CONSUL_VERSION}
-    container_name: consul
-    command: >-
-      agent
-      -bind=0.0.0.0
-      -config-file=/config.json
-    volumes:
-      - ./config/consul.json:/config.json
-    networks:
-      - vault
+    image: "consul"
+    hostname: "consul"
+    command: "agent -dev -client 0.0.0.0"
     ports:
-      - "9300:9300"
-      - "9500:9500"
-      - "9600:9600/udp"
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
 
   vault:
-    image: vault:${VAULT_VERSION}
-    container_name: vault
-    ports:
-      - "9200:8200"
-    volumes:
-      - ./config/vault.json:/config.json
-    cap_add:
-      - IPC_LOCK
-    networks:
-      - vault
-    command: >-
-      server
-      -config=/config.json
-  client:
-    container_name: client
-    build:
-      context: .
-      dockerfile: Dockerfile
+    depends_on:
+      - consul
+    image: "vault"
+    hostname: "vault"
+    links:
+      - "consul:consul"
     environment:
-      - CONSUL_HTTP_ADDR=host.docker.internal:9500
-      - VAULT_ADDR=http://host.docker.internal:9200
+      VAULT_ADDR: http://127.0.0.1:8200
+    ports:
+      - "8200:8200"
     volumes:
-      - ./client-scripts:/mnt/data
-    command: tail -f /dev/null
+      - ./tools/wait-for-it.sh:/wait-for-it.sh
+      - ./config/vault:/config
+      - ./config/vault/policies:/policies
+    entrypoint: /wait-for-it.sh -t 20 -h consul -p 8500 -s -- vault server -config=/config/with-consul.hcl
 
-networks:
-  vault:
+  blueocean:
+    user: root
+    depends_on:
+      - vault
+    image: "jenkinsci/blueocean:latest"
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - 'jenkins-data:/var/jenkins_home'
+volumes:
+  jenkins-data:
+    external:
+      name: jenkins-data
+
+
