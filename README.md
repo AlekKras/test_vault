@@ -149,3 +149,11 @@ Create volume called `jenkins-data` and bind local directory config to the consu
 ```
 docker-compose up -d
 ```
+### Method 5: My favorite 
+
+The idea would be as follow:
+
+| Server | Client |
+| --- | --- |
+| Consul-Server, Docker, Nomad-Server, Nomad-Client, Traefik, DNSmasq | Consul-Client, Docker, Nomad-Client, DNSmasq |
+

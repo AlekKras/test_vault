@@ -1,0 +1,6 @@
+- src: geerlingguy.docker
+- src: brianshumate.consul
+- src: griggheo.consul-template
+- src: brianshumate.vault
+- src: brianshumate.nomad
+- src: kibatic.traefik
