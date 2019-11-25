@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
     vault1.vm.box = "bento/centos-7.3"
     vault1.vm.box_version = "2.3.8"
     vault1.vm.hostname = "vault1"
-    vault1.vm.network :private_network, ip: "192.168.50.150"
+    vault1.vm.network :private_network, ip: "192.68.112.171"
     vault1.vm.network :forwarded_port, guest: 8200, host: 8200, auto_correct: true
     vault1.vm.network :forwarded_port, guest: 8500, host: 3500, auto_correct: true
   end
@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
     vault2.vm.box = "bento/centos-7.3"
     vault2.vm.box_version = "2.3.8"
     vault2.vm.hostname = "vault2"
-    vault2.vm.network :private_network, ip: "192.168.50.151"
+    vault2.vm.network :private_network, ip: "192.68.112.171"
     vault2.vm.network :forwarded_port, guest: 8200, host: 8201, auto_correct: true
   end
 
@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
     vault3.vm.box = "bento/centos-7.3"
     vault3.vm.box_version = "2.3.8"
     vault3.vm.hostname = "vault3"
-    vault3.vm.network :private_network, ip: "192.168.50.152"
+    vault3.vm.network :private_network, ip: "192.68.112.171"
     vault3.vm.network :forwarded_port, guest: 8200, host: 8202, auto_correct: true
   end
   config.vm.provision "shell", path: "scripts/setup-user.sh", args: "vault"
